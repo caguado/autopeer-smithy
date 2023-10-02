@@ -1,0 +1,37 @@
+{
+    "version": "1.0",
+    "projections": {
+        "default": {
+            "transforms": [
+                {
+                    "name": "excludeShapesByTag",
+                    "args": {
+                        "tags": ["internal"]
+                    }
+                },
+                {
+                    "name": "excludeShapesByTrait",
+                    "args": {
+                        "traits": ["internal"]
+                    }
+                },
+                {
+                    "name": "excludeMetadata",
+                    "args": {
+                        "keys": ["suppressions", "validators"]
+                    }
+                },
+                {
+                    "name": "removeUnusedShapes"
+                }
+            ],
+            "plugins": {
+                "openapi": {
+                    "service": "bgp.autopeer.v10#AutoPeer",
+                    "protocol": "aws.protocols#restJson1",
+                    "version": "3.0.2"
+                }
+            }
+        }
+    }
+}

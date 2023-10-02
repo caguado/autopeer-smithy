@@ -1,0 +1,913 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "AutoPeer",
+        "version": "1.0"
+    },
+    "paths": {
+        "/locations": {
+            "get": {
+                "operationId": "ListLocations",
+                "parameters": [
+                    {
+                        "name": "maxResults",
+                        "in": "query",
+                        "schema": {
+                            "type": "number",
+                            "default": 0,
+                            "maximum": 100,
+                            "minimum": 0
+                        },
+                        "examples": {
+                            "ListLocations_example1": {
+                                "summary": "Lists locations - happy path first page",
+                                "description": "Retrieves the first page of a list of locations",
+                                "value": 1
+                            },
+                            "ListLocations_example2": {
+                                "summary": "Lists locations - happy path second and last page",
+                                "description": "Retrieves the second and last page of a list of locations",
+                                "value": 1
+                            }
+                        }
+                    },
+                    {
+                        "name": "nextToken",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "ListLocations_example2": {
+                                "summary": "Lists locations - happy path second and last page",
+                                "description": "Retrieves the second and last page of a list of locations",
+                                "value": "b2f8388d59e54b788f42c9cc20f091c4"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ListLocations 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListLocationsResponseContent"
+                                },
+                                "examples": {
+                                    "ListLocations_example1": {
+                                        "summary": "Lists locations - happy path first page",
+                                        "description": "Retrieves the first page of a list of locations",
+                                        "value": {
+                                            "locations": [
+                                                {
+                                                    "locationIdentifier": "id-123",
+                                                    "locationType": "public"
+                                                }
+                                            ],
+                                            "nextToken": "b2f8388d59e54b788f42c9cc20f091c4"
+                                        }
+                                    },
+                                    "ListLocations_example2": {
+                                        "summary": "Lists locations - happy path second and last page",
+                                        "description": "Retrieves the second and last page of a list of locations",
+                                        "value": {
+                                            "locations": [
+                                                {
+                                                    "locationIdentifier": "id-456",
+                                                    "locationType": "public"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequestException 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "ForbiddenException 403 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/locations/{locationIdentifier}": {
+            "get": {
+                "operationId": "GetLocation",
+                "parameters": [
+                    {
+                        "name": "locationIdentifier",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 32,
+                            "minLength": 3,
+                            "pattern": "^[a-z0-9-.]+$"
+                        },
+                        "required": true,
+                        "examples": {
+                            "GetLocation_example1": {
+                                "summary": "Get a single location - happy path",
+                                "description": "Retrieves all the properties of a location by its location ID",
+                                "value": "id-123"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "GetLocation 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetLocationResponseContent"
+                                },
+                                "examples": {
+                                    "GetLocation_example1": {
+                                        "summary": "Get a single location - happy path",
+                                        "description": "Retrieves all the properties of a location by its location ID",
+                                        "value": {
+                                            "location": {
+                                                "locationIdentifier": "id-456",
+                                                "locationType": "public",
+                                                "description": "This is the public location 456"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequestException 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "ForbiddenException 403 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ResourceNotFoundException 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResourceNotFoundExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sessions": {
+            "get": {
+                "operationId": "ListSessions",
+                "parameters": [
+                    {
+                        "name": "maxResults",
+                        "in": "query",
+                        "schema": {
+                            "type": "number",
+                            "default": 0,
+                            "maximum": 100,
+                            "minimum": 0
+                        },
+                        "examples": {
+                            "ListSessions_example1": {
+                                "summary": "Lists sessions - happy path",
+                                "description": "Retrieves a paginated list of sessions",
+                                "value": 10
+                            }
+                        }
+                    },
+                    {
+                        "name": "nextToken",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ListSessions 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListSessionsResponseContent"
+                                },
+                                "examples": {
+                                    "ListSessions_example1": {
+                                        "summary": "Lists sessions - happy path",
+                                        "description": "Retrieves a paginated list of sessions",
+                                        "value": {
+                                            "sessions": [
+                                                {
+                                                    "sessionIdentifier": "session-id-123",
+                                                    "initiatorAsn": "2345",
+                                                    "initiatorIpAddress": "192.168.100.108",
+                                                    "locationIdentifier": "id-123"
+                                                },
+                                                {
+                                                    "sessionIdentifier": "session-id-456",
+                                                    "initiatorAsn": "2345",
+                                                    "initiatorIpAddress": "192.168.100.109",
+                                                    "locationIdentifier": "id-123"
+                                                },
+                                                {
+                                                    "sessionIdentifier": "session-id-789",
+                                                    "initiatorAsn": "2345",
+                                                    "initiatorIpAddress": "172.16.100.108",
+                                                    "locationIdentifier": "id-456"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequestException 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "ForbiddenException 403 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "CreateSessions",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSessionsRequestContent"
+                            },
+                            "examples": {
+                                "CreateSessions_example1": {
+                                    "summary": "Create multiple sessions - happy path",
+                                    "description": "Creates a request for multiple sessions across different locations",
+                                    "value": {
+                                        "sessions": [
+                                            {
+                                                "itemToken": "f7995efa-1dd8-4184-b0a9-436cb992f0f1",
+                                                "initiatorAsn": "2345",
+                                                "initiatorIpAddress": "192.168.100.108",
+                                                "targetAsn": "5678",
+                                                "targetIpAddress": "192.168.100.110",
+                                                "locationIdentifier": "id-123"
+                                            },
+                                            {
+                                                "itemToken": "c4a9d24b-12d7-402a-8e25-423d5cfe231a",
+                                                "initiatorAsn": "2345",
+                                                "initiatorIpAddress": "192.168.100.109",
+                                                "targetAsn": "5678",
+                                                "targetIpAddress": "192.168.100.111",
+                                                "locationIdentifier": "id-123"
+                                            },
+                                            {
+                                                "itemToken": "7acf7916-c2c7-4ce3-8129-c00e297e7d10",
+                                                "initiatorAsn": "2345",
+                                                "initiatorIpAddress": "172.16.100.108",
+                                                "targetAsn": "5678",
+                                                "targetIpAddress": "172.16.100.110",
+                                                "locationIdentifier": "id-456",
+                                                "authentication": {
+                                                    "type": "md5",
+                                                    "payload": "some-secret-string"
+                                                }
+                                            }
+                                        ],
+                                        "clientToken": "31d25906-4e64-4ddb-8110-bfb7e32a3467"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "CreateSessions 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateSessionsResponseContent"
+                                },
+                                "examples": {
+                                    "CreateSessions_example1": {
+                                        "summary": "Create multiple sessions - happy path",
+                                        "description": "Creates a request for multiple sessions across different locations",
+                                        "value": {
+                                            "sessions": [
+                                                {
+                                                    "itemToken": "f7995efa-1dd8-4184-b0a9-436cb992f0f1",
+                                                    "sessionIdentifier": "session-id-123"
+                                                },
+                                                {
+                                                    "itemToken": "c4a9d24b-12d7-402a-8e25-423d5cfe231a",
+                                                    "sessionIdentifier": "session-id-456"
+                                                }
+                                            ],
+                                            "errors": [
+                                                {
+                                                    "itemToken": "7acf7916-c2c7-4ce3-8129-c00e297e7d10",
+                                                    "error": "Session already exists for the given initiator"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequestException 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "ForbiddenException 403 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "ConflictException 409 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConflictExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sessions/{sessionIdentifier}": {
+            "get": {
+                "operationId": "GetSession",
+                "parameters": [
+                    {
+                        "name": "sessionIdentifier",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 32,
+                            "minLength": 3,
+                            "pattern": "^[a-z0-9-.]+$"
+                        },
+                        "required": true,
+                        "examples": {
+                            "GetSession_example1": {
+                                "summary": "Get a single session - happy path",
+                                "description": "Retrieves all the properties for a given session",
+                                "value": "session-id-123"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "GetSession 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetSessionResponseContent"
+                                },
+                                "examples": {
+                                    "GetSession_example1": {
+                                        "summary": "Get a single session - happy path",
+                                        "description": "Retrieves all the properties for a given session",
+                                        "value": {
+                                            "session": {
+                                                "sessionIdentifier": "session-id-123",
+                                                "initiatorAsn": "2345",
+                                                "initiatorIpAddress": "192.168.100.108",
+                                                "targetAsn": "5678",
+                                                "targetIpAddress": "192.168.100.110",
+                                                "locationIdentifier": "id-123",
+                                                "authentication": {
+                                                    "type": "md5",
+                                                    "payload": "REDACTED"
+                                                },
+                                                "status": "provisioned"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequestException 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "ForbiddenException 403 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "ResourceNotFoundException 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResourceNotFoundExceptionResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "ThrottlingException 429 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThrottlingExceptionResponseContent"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthenticationType": {
+                "type": "string",
+                "enum": [
+                    "md5"
+                ]
+            },
+            "BadRequestExceptionResponseContent": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "message"
+                ]
+            },
+            "ConflictExceptionResponseContent": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "message"
+                ]
+            },
+            "CreateSessionErrorItem": {
+                "type": "object",
+                "properties": {
+                    "itemToken": {
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 3
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "error",
+                    "itemToken"
+                ]
+            },
+            "CreateSessionInputItem": {
+                "type": "object",
+                "properties": {
+                    "itemToken": {
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 3
+                    },
+                    "initiatorAsn": {
+                        "type": "string"
+                    },
+                    "initiatorIpAddress": {
+                        "type": "string"
+                    },
+                    "targetAsn": {
+                        "type": "string"
+                    },
+                    "targetIpAddress": {
+                        "type": "string"
+                    },
+                    "locationIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    },
+                    "authentication": {
+                        "$ref": "#/components/schemas/SessionAuthentication"
+                    }
+                },
+                "required": [
+                    "initiatorAsn",
+                    "initiatorIpAddress",
+                    "itemToken",
+                    "locationIdentifier",
+                    "targetAsn",
+                    "targetIpAddress"
+                ]
+            },
+            "CreateSessionOutputItem": {
+                "type": "object",
+                "properties": {
+                    "itemToken": {
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 3
+                    },
+                    "sessionIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    }
+                },
+                "required": [
+                    "itemToken",
+                    "sessionIdentifier"
+                ]
+            },
+            "CreateSessionsRequestContent": {
+                "type": "object",
+                "properties": {
+                    "sessions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CreateSessionInputItem"
+                        }
+                    },
+                    "clientToken": {
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 3
+                    }
+                }
+            },
+            "CreateSessionsResponseContent": {
+                "type": "object",
+                "properties": {
+                    "sessions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CreateSessionOutputItem"
+                        }
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CreateSessionErrorItem"
+                        }
+                    }
+                }
+            },
+            "ForbiddenExceptionResponseContent": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "message"
+                ]
+            },
+            "GetLocationResponseContent": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "$ref": "#/components/schemas/LocationDetails"
+                    }
+                },
+                "required": [
+                    "location"
+                ]
+            },
+            "GetSessionResponseContent": {
+                "type": "object",
+                "properties": {
+                    "session": {
+                        "$ref": "#/components/schemas/SessionDetails"
+                    }
+                },
+                "required": [
+                    "session"
+                ]
+            },
+            "ListLocationsResponseContent": {
+                "type": "object",
+                "properties": {
+                    "nextToken": {
+                        "type": "string"
+                    },
+                    "locations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LocationSummary"
+                        }
+                    }
+                },
+                "required": [
+                    "locations"
+                ]
+            },
+            "ListSessionsResponseContent": {
+                "type": "object",
+                "properties": {
+                    "nextToken": {
+                        "type": "string"
+                    },
+                    "sessions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SessionSummary"
+                        }
+                    }
+                },
+                "required": [
+                    "sessions"
+                ]
+            },
+            "LocationDetails": {
+                "type": "object",
+                "properties": {
+                    "locationIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    },
+                    "locationType": {
+                        "$ref": "#/components/schemas/LocationType"
+                    },
+                    "description": {
+                        "type": "string",
+                        "maxLength": 250,
+                        "minLength": 3,
+                        "pattern": "^.+$"
+                    }
+                },
+                "required": [
+                    "description",
+                    "locationIdentifier",
+                    "locationType"
+                ]
+            },
+            "LocationSummary": {
+                "type": "object",
+                "properties": {
+                    "locationIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    },
+                    "locationType": {
+                        "$ref": "#/components/schemas/LocationType"
+                    }
+                },
+                "required": [
+                    "locationIdentifier",
+                    "locationType"
+                ]
+            },
+            "LocationType": {
+                "type": "string",
+                "enum": [
+                    "public",
+                    "private"
+                ]
+            },
+            "ResourceNotFoundExceptionResponseContent": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "message"
+                ]
+            },
+            "ResourceStatus": {
+                "type": "string",
+                "enum": [
+                    "requested",
+                    "provisioned",
+                    "disabled"
+                ]
+            },
+            "SessionAuthentication": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/AuthenticationType"
+                    },
+                    "payload": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": [
+                    "type"
+                ]
+            },
+            "SessionDetails": {
+                "type": "object",
+                "properties": {
+                    "sessionIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    },
+                    "initiatorAsn": {
+                        "type": "string"
+                    },
+                    "initiatorIpAddress": {
+                        "type": "string"
+                    },
+                    "targetAsn": {
+                        "type": "string"
+                    },
+                    "targetIpAddress": {
+                        "type": "string"
+                    },
+                    "locationIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    },
+                    "authentication": {
+                        "$ref": "#/components/schemas/SessionAuthentication"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ResourceStatus"
+                    }
+                },
+                "required": [
+                    "initiatorAsn",
+                    "initiatorIpAddress",
+                    "locationIdentifier",
+                    "sessionIdentifier",
+                    "status",
+                    "targetAsn",
+                    "targetIpAddress"
+                ]
+            },
+            "SessionSummary": {
+                "type": "object",
+                "properties": {
+                    "sessionIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    },
+                    "initiatorAsn": {
+                        "type": "string"
+                    },
+                    "initiatorIpAddress": {
+                        "type": "string"
+                    },
+                    "locationIdentifier": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 3,
+                        "pattern": "^[a-z0-9-.]+$"
+                    }
+                },
+                "required": [
+                    "initiatorAsn",
+                    "initiatorIpAddress",
+                    "locationIdentifier",
+                    "sessionIdentifier"
+                ]
+            },
+            "ThrottlingExceptionResponseContent": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "message"
+                ]
+            }
+        }
+    }
+}
